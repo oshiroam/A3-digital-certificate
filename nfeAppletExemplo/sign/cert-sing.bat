@@ -1,0 +1,1 @@
+keytool -genkey -dname "cn=JavaC, ou=JavaC, o=JavaC, c=BR" -alias key -storepass 235672361 -validity 36500

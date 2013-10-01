@@ -1,0 +1,67 @@
+<project name="nfeAppletExemplo" default="all" basedir=".">
+	<property environment="env"/>
+	<property file="build.xml.properties"/>
+	
+	<path id="class.path">		
+		<fileset dir="${lib}">
+	    	<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	
+	<pathconvert property="class-path" pathsep=" " dirsep="/">
+	  	<path refid="class.path"></path>
+	  	<map from="${basedir}/${lib}/" to=""/>		
+	</pathconvert>
+	
+	<target name="prepare">
+		<delete dir="${bin}" includeemptydirs="true" 
+			includes="**/*.*" failonerror="false"/>
+	  	<mkdir dir="${bin}"/>
+	  	<mkdir dir="${dist}"/>
+	</target>	
+	
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src}" destdir="${bin}" debug="true">
+			<classpath refid="class.path"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+	 	<jar destfile="${dist}/${jar}">
+			<fileset dir="${bin}"/>
+			<fileset dir="${src}" excludes="**/*.java" 
+				defaultexcludes="true"/>
+	 		<manifest>
+	 			<attribute name="Built-By" value="${user.name}"/>
+	 			<attribute name="OS" value="${os.name}"/>
+	 			<attribute name="OS-Version" value="${os.version}"/>
+	 			<attribute name="Class-Path" value="${class-path}"/>
+	 		</manifest>
+ 		</jar>
+        <signjar 
+        	jar="${dist}/${jar}" 
+	   		alias="${alias}"   
+	        storepass="235672361"
+        />
+        <signjar
+        	destDir="${dist}"
+	   		alias="${alias}"   
+	        storepass="235672361">
+        	<path>
+        	    <fileset dir="${lib}" includes="**/*.jar" />
+       	  	</path>        	
+        </signjar>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${bin}" defaultexcludes="false"
+                includes="**" includeemptydirs="true"/>
+	</target>
+	
+    <target name="all" depends="jar, clean" >
+		<copy todir="${dist}">
+			<fileset file="nfe.html"/>
+		</copy>
+    </target>
+
+</project>
