@@ -42,10 +42,10 @@ import org.xml.sax.SAXException;
  * Assinatura dos XMLs do Projeto NF-e, CC-e e DPEC
  * Envio do Lote NF-e;
  * Cancelamento da NF-e;
- * Inutilização da NF-e;
+ * InutilizaÃ§Ã£o da NF-e;
  * Envio do Lote de Eventos - CC-e;
  * Envio do DPEC;
- * @author Maciel Gonçalves
+ * @author Maciel Gonï¿½alves
  *
  */
 public class AssinarXML {
@@ -60,7 +60,14 @@ public class AssinarXML {
 	private KeyStore keyStore;
 	private String alias;
 	private String senha;
-
+	
+	/**
+	 * Construtor
+	 * 
+	 * @param keyStore
+	 * @param alias
+	 * @param senha
+	 */
 	public AssinarXML(KeyStore keyStore, String alias, String senha) {
 		this.keyStore = keyStore;
 		this.alias = alias;
@@ -69,7 +76,7 @@ public class AssinarXML {
 	
 	/**
 	 * Assinatura do XML de Envio do DPEC.
-	 * DPEC = Emissão da NF-e com Prévio Registro da DPEC no Ambiente Nacional.
+	 * DPEC = EmissÃ£o da NF-e com PrÃ©vio Registro da DPEC no Ambiente Nacional.
 	 * @param xml
 	 * @param certificado
 	 * @param senha
@@ -150,6 +157,11 @@ public class AssinarXML {
 		return assinaCancInutDpec(xml, INFINUT);
 	}
 
+	/**
+	 * 
+	 * @param signatureFactory
+	 * @throws Exception
+	 */
 	private void loadCertificates(XMLSignatureFactory signatureFactory) throws Exception {
 		if (keyStore != null) {
 			KeyStore.PrivateKeyEntry pkEntry = null;
@@ -168,14 +180,25 @@ public class AssinarXML {
 				keyInfo = keyInfoFactory.newKeyInfo(Collections.singletonList(x509Data));
 			}
 			else {
-				throw new Exception("Alias do certificado inválido.");
+				throw new Exception("Alias do certificado invÃ¡lido.");
 			}
 		}
 		else {
-			throw new Exception("Informações do Certificado inválidas.");
+			throw new Exception("InformaÃ§Ãµes do Certificado invÃ¡lidas.");
 		}
 	}
 
+	/**
+	 * 
+	 * @param tipo
+	 * @param fac
+	 * @param transformList
+	 * @param privateKey
+	 * @param ki
+	 * @param document
+	 * @param index
+	 * @throws Exception
+	 */
 	private void assinar(String tipo, XMLSignatureFactory fac,
 			ArrayList<Transform> transformList, PrivateKey privateKey,
 			KeyInfo ki, Document document, int index) throws Exception {
@@ -207,11 +230,18 @@ public class AssinarXML {
 		signature.sign(dsc);
 	}
 
+	/**
+	 * 
+	 * @param xml
+	 * @param tag
+	 * @return
+	 * @throws Exception
+	 */
 	private String assinaCancInutDpec(String xml, String tag) throws Exception {
 		Document document = documentFactory(xml);
 
-		XMLSignatureFactory signatureFactory = XMLSignatureFactory
-				.getInstance("DOM");
+		XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
+		
 		ArrayList<Transform> transformList = signatureFactory(signatureFactory);
 		loadCertificates(signatureFactory);
 
@@ -237,6 +267,13 @@ public class AssinarXML {
 		return outputXML(document);
 	}
 
+	/**
+	 * 
+	 * @param signatureFactory
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidAlgorithmParameterException
+	 */
 	private ArrayList<Transform> signatureFactory(
 			XMLSignatureFactory signatureFactory)
 			throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {

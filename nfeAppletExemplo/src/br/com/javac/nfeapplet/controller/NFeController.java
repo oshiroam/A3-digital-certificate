@@ -20,17 +20,26 @@ import br.com.javac.nfeapplet.util.Utils;
 import br.com.javac.nfeapplet.view.NFe;
 
 public class NFeController {
-	private final static String MSG_SELECIONE_UM_CERTIFIADO = "Selecione um Certificado Digital. Para exibir os Certiticados Digitais clique no bot�o Listar Certificados.";
+	private final static String MSG_SELECIONE_UM_CERTIFIADO = "Selecione um Certificado Digital. Para exibir os Certiticados Digitais clique no botão Listar Certificados.";
 
 	private NFe view;
 	private CertificadoWindows certificadoWindows;
 	private SefazService sefazService;
 	private List<Certificado> listaDeCertificados;
-
+	
+	/**
+	 * Construtor
+	 * 
+	 * @param view
+	 */
 	public NFeController(NFe view) {
 		this.view = view;
 	}
-
+	
+	/**
+	 * Lista certificados
+	 * 
+	 */
 	public void listaCerticados() {
 		Thread processar = new Thread() {
 			@SuppressWarnings("unchecked")
@@ -56,6 +65,12 @@ public class NFeController {
 		processar.start();
 	}
 
+	/**
+	 * Obtem dados do certificado
+	 * -Emitido para
+	 * - Alias
+	 * - Validade 
+	 */
 	public void dadosDoCertificado() {
 		Thread processar = new Thread() {
 			@Override
@@ -73,7 +88,7 @@ public class NFeController {
 								getView().getTextInformacao().append("ValidoAte: " + certificado.getValidoAte());
 							}
 							else {
-								throw new Exception("Certificado Digital n�o localizado.");
+								throw new Exception("Certificado Digital não localizado.");
 							}
 		            	}
 		            	else {
@@ -90,7 +105,13 @@ public class NFeController {
 		};
 		processar.start();
 	}
-
+	
+	/**
+	 * Assinar xml fazendo verificações
+	 * 
+	 * Verifica se um certificado foi selecionado e se foi localizado.
+	 * Chama método para assinar passando parâmetros 
+	 */
 	public void assinarXml() {
 		Thread processar = new Thread() {
 			@Override
@@ -113,7 +134,7 @@ public class NFeController {
 								}
 		            		}
 							else {
-								throw new Exception("Certificado Digital n�o localizado.");
+								throw new Exception("Certificado Digital não localizado.");
 							}
 		            	}
 		            	else {
@@ -133,13 +154,39 @@ public class NFeController {
 		processar.start();
 	}
 
+	/**
+	 * Consuilta status do serviço.
+	 * Adicionei os links dos WS de homologação e de produção do estado MT
+	 * 
+	 * Faz verificações no certificado.
+	 */
 	public void consultaStatusDoServico() {
 		Thread processar = new Thread() {
 			@Override
 			public void run() {
 				try {
 					String codigoDoEstado = "52";
-		            URL url = new URL("https://homolog.sefaz.go.gov.br/nfe/services/v2/NfeStatusServico2");
+//		            URL url = new URL("https://homolog.sefaz.go.gov.br/nfe/services/v2/NfeStatusServico2");
+					
+//					Homologação
+//					NfeRecepcao			2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
+//					NfeRetRecepcao		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl
+//					NfeInutilizacao		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl
+//					NfeConsultaProtocolo	2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl
+//					NfeStatusServico	2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl
+//					RecepcaoEvento		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl
+					
+//					Produção
+//					NfeRecepcao			2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
+//					NfeRetRecepcao		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl
+//					NfeInutilizacao		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl
+//					NfeConsultaProtocolo	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl
+//					NfeStatusServico	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl
+//					NfeConsultaCadastro	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2?wsdl
+//					RecepcaoEvento		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl
+							
+		            URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
+		            
 		            clearMessages();
 		            if ((getListaDeCertificados() != null) && (!getListaDeCertificados().isEmpty())) {
 						int indexSelected = getView().getListaCertificados().getSelectedIndex();
@@ -151,13 +198,13 @@ public class NFeController {
 
 							Certificado certificado = getListaDeCertificados().get(indexSelected);
 							if (certificado != null) {
-								startProgressBar("Aguarde! Consultando Status do Servi�o...");
+								startProgressBar("Aguarde! Consultando Status do Serviço...");
 								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
 								String retorno = getSefazService().consultaStatusDoServico(codigoDoEstado, url);
 								getView().getTextInformacao().append(retorno);
 							}
 							else {
-								throw new Exception("Certificado Digital n�o localizado.");
+								throw new Exception("Certificado Digital não localizado.");
 							}
 		            	}
 		            	else {
@@ -205,6 +252,19 @@ public class NFeController {
 		getView().getTextInformacao().setEditable(enable);
 	}
 
+	/**
+	 * Obtem dados do certificado para assinar o arquivo XML
+	 * Dependedo da rotina selecionada, assina o arquivo correspondente
+	 * 
+	 * @param certificado
+	 * @param xmlPath
+	 * @throws IOException
+	 * @throws KeyStoreException
+	 * @throws NoSuchProviderException
+	 * @throws NoSuchAlgorithmException
+	 * @throws CertificateException
+	 * @throws Exception
+	 */
 	private void assinatura(Certificado certificado, String xmlPath) throws IOException, KeyStoreException,
 			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, Exception {
 		KeyStore keyStore = getCertificadoWindows().getKeyStore();
@@ -235,11 +295,18 @@ public class NFeController {
 
 		getView().getTextInformacao().append(xmlAssinado);
 	}
-
+	
+	/**
+	 * 
+	 */
 	private void clearMessages() {
 		getView().getTextInformacao().setText("");
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public CertificadoWindows getCertificadoWindows() {
 		if (certificadoWindows == null) {
 			certificadoWindows = new CertificadoWindows();
@@ -247,17 +314,29 @@ public class NFeController {
 		return certificadoWindows;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public SefazService getSefazService() {
 		if (sefazService == null) {
 			sefazService = new SefazService();
 		}
 		return sefazService;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Certificado> getListaDeCertificados() {
 		return listaDeCertificados;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public NFe getView() {
 		return view;
 	}
