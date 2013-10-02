@@ -19,9 +19,23 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+/**
+ * 
+ * @author alisson
+ *
+ */
 public class CertUtil {
 	private static final int TIMEOUT_WS = 120;
 
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 * @param forceCreate
+	 * @param cte
+	 * @return
+	 * @throws Exception
+	 */
 	public static File get(String host, int port, boolean forceCreate, boolean cte) throws Exception {
 		char[] passphrase = "changeit".toCharArray();
 		String fileCacerts = cte ? Utils.getUserHome() + "/.cte-cacerts" : Utils.getUserHome() + "/.nfe-cacerts";
@@ -47,8 +61,8 @@ public class CertUtil {
 		    in.close();
 		 
 		    SSLContext context = SSLContext.getInstance("TLS");
-		    TrustManagerFactory tmf = TrustManagerFactory.getInstance(
-		    		TrustManagerFactory.getDefaultAlgorithm());
+		    TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+		    
 		    tmf.init(ks);
 		    X509TrustManager defaultTrustManager = (X509TrustManager) tmf.getTrustManagers()[0];
 		    SavingTrustManager tm = new SavingTrustManager(defaultTrustManager);
@@ -58,8 +72,10 @@ public class CertUtil {
 		    SSLSocket socket = (SSLSocket) factory.createSocket(host, port);
 		    socket.setSoTimeout(TIMEOUT_WS * 1000);
 		    try {
+		    	info("| Starting SSL handshake...");
 		    	socket.startHandshake();
 		    	socket.close();
+//		    	info("| No errors, certificate is already trusted");
 		    } catch (SSLHandshakeException e) {
 		    	/**
 		    	 * PKIX path building failed: 
@@ -101,6 +117,11 @@ public class CertUtil {
 		}
 	}
 
+	/**
+	 * 
+	 * @author alisson
+	 *
+	 */
 	private static class SavingTrustManager implements X509TrustManager {
 	    private final X509TrustManager tm;
 	    private X509Certificate[] chain;
@@ -125,8 +146,20 @@ public class CertUtil {
 	    }
 	}
 	
+	/**
+	 * 
+	 * @param log
+	 */
 	private static void error(String log) {
         System.out.println("ERROR: " + log);
+    }
+	
+	/**
+	 * 
+	 * @param log
+	 */
+	private static void info(String log) {
+        System.out.println("INFO: " + log);
     }
 
 }

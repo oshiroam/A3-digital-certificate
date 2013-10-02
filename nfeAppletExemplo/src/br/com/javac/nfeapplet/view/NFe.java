@@ -222,12 +222,15 @@ public class NFe extends JApplet {
 	public JList getListaCertificados() {
 		return listaCertificados;
 	}
+	
 	public JTextArea getTextInformacao() {
 		return textInformacao;
 	}
+	
 	public JProgressBar getProgressBarStatus() {
 		return progressBarStatus;
 	}
+	
 	public JButton getBtnConsultarStatusServico() {
 		return btnConsultarStatusServico;
 	}
@@ -237,9 +240,14 @@ public class NFe extends JApplet {
 	public JButton getBtnListarCertificados() {
 		return btnListarCertificados;
 	}
+	public JButton getBtnAssinatura() {
+		return btnAssinatura;
+	}
+	
 	public JPasswordField getEdtSenhaDoCertificado() {
 		return edtSenhaDoCertificado;
 	}
+	
 	public JRadioButton getRbtLoteNfe() {
 		return rbtLoteNfe;
 	}
@@ -254,8 +262,5 @@ public class NFe extends JApplet {
 	}
 	public JRadioButton getRbtDpec() {
 		return rbtDpec;
-	}
-	public JButton getBtnAssinatura() {
-		return btnAssinatura;
 	}
 }

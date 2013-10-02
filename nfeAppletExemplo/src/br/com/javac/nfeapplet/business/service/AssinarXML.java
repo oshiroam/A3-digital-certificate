@@ -279,8 +279,8 @@ public class AssinarXML {
 			throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 		ArrayList<Transform> transformList = new ArrayList<Transform>();
 		TransformParameterSpec tps = null;
-		Transform envelopedTransform = signatureFactory.newTransform(
-				Transform.ENVELOPED, tps);
+		Transform envelopedTransform = signatureFactory.newTransform(Transform.ENVELOPED, tps);
+		
 		Transform c14NTransform = signatureFactory.newTransform(
 				"http://www.w3.org/TR/2001/REC-xml-c14n-20010315", tps);
 
@@ -289,15 +289,29 @@ public class AssinarXML {
 		return transformList;
 	}
 
+	/**
+	 * 
+	 * @param xml
+	 * @return
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	private Document documentFactory(String xml) throws SAXException,
 			IOException, ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
-		Document document = factory.newDocumentBuilder().parse(
-				new ByteArrayInputStream(xml.getBytes()));
+		Document document = factory.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes()));
+		
 		return document;
 	}
 
+	/**
+	 * 
+	 * @param doc
+	 * @return
+	 * @throws TransformerException
+	 */
 	private String outputXML(Document doc) throws TransformerException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		TransformerFactory tf = TransformerFactory.newInstance();
@@ -310,7 +324,11 @@ public class AssinarXML {
 		}
 		return xml;
 	}
-
+	
+	/**
+	 * 
+	 * @param keyStore
+	 */
 	public void setKeyStore(KeyStore keyStore) {
 		this.keyStore = keyStore;
 	}

@@ -27,6 +27,23 @@ public class NFeController {
 	private SefazService sefazService;
 	private List<Certificado> listaDeCertificados;
 	
+//	 WebServices de homologação
+//	NfeRecepcao			2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
+//	NfeRetRecepcao		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl
+//	NfeInutilizacao		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl
+//	NfeConsultaProtocolo	2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl
+//	NfeStatusServico	2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl
+//	RecepcaoEvento		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl
+	
+//	WebServices de produção
+//	NfeRecepcao			2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
+//	NfeRetRecepcao		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl
+//	NfeInutilizacao		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl
+//	NfeConsultaProtocolo	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl
+//	NfeStatusServico	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl
+//	NfeConsultaCadastro	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2?wsdl
+//	RecepcaoEvento		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl
+	
 	/**
 	 * Construtor
 	 * 
@@ -165,26 +182,11 @@ public class NFeController {
 			@Override
 			public void run() {
 				try {
-					String codigoDoEstado = "52";
-//		            URL url = new URL("https://homolog.sefaz.go.gov.br/nfe/services/v2/NfeStatusServico2");
+					String codigoDoEstado = "51"; // Mato grosso // Demais >> http://dtr2001.saude.gov.br/sas/decas/anexo01.mansia.htm
+//					Produção
+//		            URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
 					
 //					Homologação
-//					NfeRecepcao			2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
-//					NfeRetRecepcao		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl
-//					NfeInutilizacao		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl
-//					NfeConsultaProtocolo	2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl
-//					NfeStatusServico	2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl
-//					RecepcaoEvento		2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl
-					
-//					Produção
-//					NfeRecepcao			2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
-//					NfeRetRecepcao		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl
-//					NfeInutilizacao		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl
-//					NfeConsultaProtocolo	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl
-//					NfeStatusServico	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl
-//					NfeConsultaCadastro	2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2?wsdl
-//					RecepcaoEvento		2.00	https://nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento?wsdl
-							
 		            URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
 		            
 		            clearMessages();
@@ -200,6 +202,8 @@ public class NFeController {
 							if (certificado != null) {
 								startProgressBar("Aguarde! Consultando Status do Serviço...");
 								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
+								
+								//Instancia um objeto do tipo Sefaz Service e invoca o método. 
 								String retorno = getSefazService().consultaStatusDoServico(codigoDoEstado, url);
 								getView().getTextInformacao().append(retorno);
 							}
@@ -223,6 +227,66 @@ public class NFeController {
 		};
 		processar.start();
 	}
+	
+	/**
+	 * Inutilizaçao de nf-e
+	 * 
+	 * 
+	 * Faz verificações no certificado.
+	 */
+//	public void nonUtilization() {
+//		Thread processar = new Thread() {
+//			@Override
+//			public void run() {
+//				try {
+//					String codigoDoEstado = "51"; // Mato grosso // Demais >> http://dtr2001.saude.gov.br/sas/decas/anexo01.mansia.htm
+////					Produção
+////		            URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl");
+//					
+////					Homologação
+//		            URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl");
+//		            
+//		            clearMessages();
+//		            if ((getListaDeCertificados() != null) && (!getListaDeCertificados().isEmpty())) {
+//						int indexSelected = getView().getListaCertificados().getSelectedIndex();
+//		            	if (indexSelected != -1) {
+//				            String senha = new String(getView().getEdtSenhaDoCertificado().getPassword());
+//				            if ((senha == null) || ("".equals(senha))) {
+//				            	throw new Exception("Digite a senha do Certificado Digital.");
+//				            }
+//
+//							Certificado certificado = getListaDeCertificados().get(indexSelected);
+//							if (certificado != null) {
+//								startProgressBar("Aguarde! ...");
+//								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
+//								
+////								Instancia um objeto do tipo Sefaz Service e invoca o método.
+////								TODO Fazer o método no SefazService
+//								String retorno = getSefazService().nonUtilizationNfe(codigoDoEstado, url);
+////								TODO Tem que descobrir como cada WS retorna as coisas, ver manual
+//								getView().getTextInformacao().append(retorno);
+//								
+//							}
+//							else {
+//								throw new Exception("Certificado Digital não localizado.");
+//							}
+//		            	}
+//		            	else {
+//		            		throw new Exception(MSG_SELECIONE_UM_CERTIFIADO);
+//		            	}
+//					}
+//					else {
+//						throw new Exception(MSG_SELECIONE_UM_CERTIFIADO);
+//					}
+//				} catch (Exception e) {
+//					getView().getTextInformacao().append(e.getMessage());
+//				} finally {
+//					stopProgressBar();
+//				}
+//			}
+//		};
+//		processar.start();
+//	}
 
 	private void startProgressBar(String texto) {
 		getView().getProgressBarStatus().setIndeterminate(true);
@@ -315,7 +379,9 @@ public class NFeController {
 	}
 
 	/**
+	 * Retorna um objeto do tipo SefazService. 
 	 * 
+	 * Verifica se o objeto sefazService foi instanciado, se for null, instância
 	 * @return
 	 */
 	public SefazService getSefazService() {

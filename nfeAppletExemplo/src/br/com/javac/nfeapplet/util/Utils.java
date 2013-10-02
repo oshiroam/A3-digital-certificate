@@ -5,12 +5,27 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * 
+ * @author alisson
+ *
+ */
 public class Utils {
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public static String getUserHome() {
 		return System.getProperty("user.home");
 	}
 	
+	/**
+	 * 
+	 * @param fileXML
+	 * @return
+	 * @throws IOException
+	 */
 	public static String lerXML(String fileXML) throws IOException {
 		String linha = "";
 		StringBuilder xml = new StringBuilder();
@@ -27,7 +42,7 @@ public class Utils {
 
 	/**
 	 * Retira quebras de linhas do XML e tag desnecessaria
-	 * na declaração do XML.
+	 * na declaraÃ§Ã£o do XML.
 	 * @param xml
 	 * @return
 	 */
@@ -36,7 +51,8 @@ public class Utils {
 			xml = xml.replaceAll("\\r\\n", "");
 			xml = xml.replaceAll(" standalone=\"no\"", "");
 		}
+		
 		return xml;
 	}
-	
 }
+
