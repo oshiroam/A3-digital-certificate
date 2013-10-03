@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -63,10 +64,19 @@ public class NFe extends JApplet {
 		panelCentro.setBackground(Color.WHITE);
 		getContentPane().add(panelCentro, BorderLayout.CENTER);
 		
+		/**********
+		 * Cria os botões e associa as ações 
+		 */
 		listaCertificados = new JList();
 		listaCertificados.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		JLabel lblCerticados = new JLabel("Certificados Instalados:");
+		JLabel lblInformaes = new JLabel("Informações:");
+		JLabel lblNewLabel = new JLabel("Senha do Certificado:");
+		edtSenhaDoCertificado = new JPasswordField();
+		
+		progressBarStatus = new JProgressBar();
+		progressBarStatus.setStringPainted(true);
 		
 		btnListarCertificados = new JButton("Listar Certificados");
 		btnListarCertificados.addActionListener(new ActionListener() {
@@ -75,12 +85,15 @@ public class NFe extends JApplet {
 			}
 		});
 		
-		JLabel lblInformaes = new JLabel("Informa\u00E7\u00F5es:");
-		
-		btnConsultarStatusServico = new JButton("Consultar Status do Servi\u00E7o SEFAZ");
+		btnConsultarStatusServico = new JButton("Consultar Status do Serviço SEFAZ");
 		btnConsultarStatusServico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getController().consultaStatusDoServico();
+				try {
+					getController().consultaStatusDoServico();
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -91,13 +104,6 @@ public class NFe extends JApplet {
 			}
 		});
 		
-		progressBarStatus = new JProgressBar();
-		progressBarStatus.setStringPainted(true);
-		
-		edtSenhaDoCertificado = new JPasswordField();
-		
-		JLabel lblNewLabel = new JLabel("Senha do Certificado:");
-		
 		rbtLoteNfe = new JRadioButton("Lote NF-e;");
 		rbtLoteNfe.setSelected(true);
 		rbtLoteNfe.setBackground(Color.WHITE);
@@ -107,17 +113,17 @@ public class NFe extends JApplet {
 		rbtCancelamento.setBackground(Color.WHITE);
 		btgAssinatura.add(rbtCancelamento);
 		
-		rbtInutilizacao = new JRadioButton("Inutiliza\u00E7\u00E3o;");
-		btgAssinatura.add(rbtInutilizacao);
+		rbtInutilizacao = new JRadioButton("Inutilização;");
 		rbtInutilizacao.setBackground(Color.WHITE);
+		btgAssinatura.add(rbtInutilizacao);
 		
-		rbtCce = new JRadioButton("Carta de Corre\u00E7\u00E3o Eletr\u00F4nica (CC-e);");
-		btgAssinatura.add(rbtCce);
+		rbtCce = new JRadioButton("Carta de Correção Eletrônica (CC-e);");
 		rbtCce.setBackground(Color.WHITE);
+		btgAssinatura.add(rbtCce);
 		
 		rbtDpec = new JRadioButton("DPEC;");
-		btgAssinatura.add(rbtDpec);
 		rbtDpec.setBackground(Color.WHITE);
+		btgAssinatura.add(rbtDpec);
 		
 		btnAssinatura = new JButton("Assinar XML");
 		btnAssinatura.addActionListener(new ActionListener() {
@@ -126,6 +132,9 @@ public class NFe extends JApplet {
 			}
 		});
 		
+		/**********
+		 * "Monta" a view 
+		 */
 		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout gl_panelCentro = new GroupLayout(panelCentro);
 		gl_panelCentro.setHorizontalGroup(

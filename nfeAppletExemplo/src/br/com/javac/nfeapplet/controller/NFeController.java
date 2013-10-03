@@ -1,6 +1,7 @@
 package br.com.javac.nfeapplet.controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -8,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.lang.reflect.*;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -26,6 +28,7 @@ public class NFeController {
 	private CertificadoWindows certificadoWindows;
 	private SefazService sefazService;
 	private List<Certificado> listaDeCertificados;
+	public String codigoDoEstado = "51"; // Mato grosso // Demais >> http://dtr2001.saude.gov.br/sas/decas/anexo01.mansia.htm
 	
 //	 WebServices de homologação
 //	NfeRecepcao			2.00	https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl
@@ -176,19 +179,77 @@ public class NFeController {
 	 * Adicionei os links dos WS de homologação e de produção do estado MT
 	 * 
 	 * Faz verificações no certificado.
+	 * @throws MalformedURLException 
 	 */
-	public void consultaStatusDoServico() {
-		Thread processar = new Thread() {
-			@Override
-			public void run() {
-				try {
-					String codigoDoEstado = "51"; // Mato grosso // Demais >> http://dtr2001.saude.gov.br/sas/decas/anexo01.mansia.htm
+	public void consultaStatusDoServico() throws MalformedURLException {
+//		Produção
+//        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
+		
+//		Homologação
+        URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
+        
+        Object data[] = new Object[20];
+		startService("consultaStatusDoServico", url, data);
+//		Thread processar = new Thread() {
+//			@Override
+//			public void run() {
+//				try {
 //					Produção
 //		            URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
 					
 //					Homologação
-		            URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
-		            
+//		            URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
+//		            
+//		            clearMessages();
+//		            if ((getListaDeCertificados() != null) && (!getListaDeCertificados().isEmpty())) {
+//						int indexSelected = getView().getListaCertificados().getSelectedIndex();
+//		            	if (indexSelected != -1) {
+//				            String senha = new String(getView().getEdtSenhaDoCertificado().getPassword());
+//				            if ((senha == null) || ("".equals(senha))) {
+//				            	throw new Exception("Digite a senha do Certificado Digital.");
+//				            }
+//
+//							Certificado certificado = getListaDeCertificados().get(indexSelected);
+//							if (certificado != null) {
+//								startProgressBar("Aguarde! Consultando Status do Serviço...");
+//								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
+//								
+//								//Instancia um objeto do tipo Sefaz Service e invoca o método. 
+//								String retorno = getSefazService().consultaStatusDoServico(codigoDoEstado, url);
+//								getView().getTextInformacao().append(retorno);
+//							}
+//							else {
+//								throw new Exception("Certificado Digital não localizado.");
+//							}
+//		            	}
+//		            	else {
+//		            		throw new Exception(MSG_SELECIONE_UM_CERTIFIADO);
+//		            	}
+//					}
+//					else {
+//						throw new Exception(MSG_SELECIONE_UM_CERTIFIADO);
+//					}
+//				} catch (Exception e) {
+//					getView().getTextInformacao().append(e.getMessage());
+//				} finally {
+//					stopProgressBar();
+//				}
+//			}
+//		};
+//		processar.start();
+	}
+	
+	public void startService(final String service, final URL url, Object data) {
+//		SefazService serv = new SefazService();
+		final Class<?> c1 = null;
+		final Method method = null;
+//		final Class[] paramTypes = new Class[]{String.class};
+		final Object[] attValue = new Object[]{"Teste"};
+		
+		Thread processar = new Thread() {
+			@Override
+			public void run() {
+				try {
 		            clearMessages();
 		            if ((getListaDeCertificados() != null) && (!getListaDeCertificados().isEmpty())) {
 						int indexSelected = getView().getListaCertificados().getSelectedIndex();
@@ -200,11 +261,16 @@ public class NFeController {
 
 							Certificado certificado = getListaDeCertificados().get(indexSelected);
 							if (certificado != null) {
-								startProgressBar("Aguarde! Consultando Status do Serviço...");
+								startProgressBar("Processando, aguarde...");
 								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
 								
 								//Instancia um objeto do tipo Sefaz Service e invoca o método. 
-								String retorno = getSefazService().consultaStatusDoServico(codigoDoEstado, url);
+								c1 = Class.forName("br.com.javac.nfeapplet.business.service.SefazService");
+//								method = c1.getMethod(service);
+								String retorno = (String) c1.getClass().getMethod(service).invoke(c1.newInstance());
+//								String retorno = (String) method.invoke(c1.newInstance(), attValue);
+								
+//								String retorno = getSefazService().service(codigoDoEstado, url);
 								getView().getTextInformacao().append(retorno);
 							}
 							else {
