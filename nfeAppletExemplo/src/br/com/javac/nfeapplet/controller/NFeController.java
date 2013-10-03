@@ -287,19 +287,30 @@ public class NFeController {
 //		};
 //		processar.start();
 //	}
-
+	
+	/**
+	 * 
+	 * @param texto
+	 */
 	private void startProgressBar(String texto) {
 		getView().getProgressBarStatus().setIndeterminate(true);
 		getView().getProgressBarStatus().setString(texto);
 		enableComponents(false);
 	}
 
+	/**
+	 * 
+	 */
 	private void stopProgressBar() {
 		getView().getProgressBarStatus().setIndeterminate(false);
 		getView().getProgressBarStatus().setString("");
 		enableComponents(true);
 	}
-
+	
+	/**
+	 * 
+	 * @param enable
+	 */
 	private void enableComponents(boolean enable) {
 		getView().getListaCertificados().setEnabled(enable);
 		getView().getEdtSenhaDoCertificado().setEnabled(enable);
@@ -406,5 +417,5 @@ public class NFeController {
 	public NFe getView() {
 		return view;
 	}
-
 }
+

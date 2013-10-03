@@ -24,6 +24,11 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JScrollPane;
 
+/**
+ * 
+ * @author alisson
+ *
+ */
 public class NFe extends JApplet {
 	private static final long serialVersionUID = -6226458876764970599L;
 	
@@ -209,6 +214,10 @@ public class NFe extends JApplet {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public NFeController getController() {
 		synchronized (NFeController.class) {
 			if (controller == null) {
@@ -218,19 +227,35 @@ public class NFe extends JApplet {
 		return controller;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public JList getListaCertificados() {
 		return listaCertificados;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public JTextArea getTextInformacao() {
 		return textInformacao;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public JProgressBar getProgressBarStatus() {
 		return progressBarStatus;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public JButton getBtnConsultarStatusServico() {
 		return btnConsultarStatusServico;
 	}
@@ -244,10 +269,18 @@ public class NFe extends JApplet {
 		return btnAssinatura;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public JPasswordField getEdtSenhaDoCertificado() {
 		return edtSenhaDoCertificado;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public JRadioButton getRbtLoteNfe() {
 		return rbtLoteNfe;
 	}
