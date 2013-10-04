@@ -3,6 +3,7 @@ package br.com.javac.nfeapplet.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+//import java.rmi.RemoteException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +14,7 @@ import java.lang.reflect.*;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+//import javax.xml.stream.XMLStreamException;
 
 import br.com.javac.nfeapplet.business.service.AssinarXML;
 import br.com.javac.nfeapplet.business.service.CertificadoWindows;
@@ -180,8 +182,14 @@ public class NFeController {
 	 * 
 	 * Faz verificações no certificado.
 	 * @throws MalformedURLException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void consultaStatusDoServico() throws MalformedURLException {
+	public void consultaStatusDoServico() 
+			throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException{
 //		Produção
 //        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
 		
@@ -190,61 +198,132 @@ public class NFeController {
         
         Object data[] = new Object[20];
 		startService("consultaStatusDoServico", url, data);
-//		Thread processar = new Thread() {
-//			@Override
-//			public void run() {
-//				try {
-//					Produção
-//		            URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
-					
-//					Homologação
-//		            URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2?wsdl");
-//		            
-//		            clearMessages();
-//		            if ((getListaDeCertificados() != null) && (!getListaDeCertificados().isEmpty())) {
-//						int indexSelected = getView().getListaCertificados().getSelectedIndex();
-//		            	if (indexSelected != -1) {
-//				            String senha = new String(getView().getEdtSenhaDoCertificado().getPassword());
-//				            if ((senha == null) || ("".equals(senha))) {
-//				            	throw new Exception("Digite a senha do Certificado Digital.");
-//				            }
-//
-//							Certificado certificado = getListaDeCertificados().get(indexSelected);
-//							if (certificado != null) {
-//								startProgressBar("Aguarde! Consultando Status do Serviço...");
-//								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
-//								
-//								//Instancia um objeto do tipo Sefaz Service e invoca o método. 
-//								String retorno = getSefazService().consultaStatusDoServico(codigoDoEstado, url);
-//								getView().getTextInformacao().append(retorno);
-//							}
-//							else {
-//								throw new Exception("Certificado Digital não localizado.");
-//							}
-//		            	}
-//		            	else {
-//		            		throw new Exception(MSG_SELECIONE_UM_CERTIFIADO);
-//		            	}
-//					}
-//					else {
-//						throw new Exception(MSG_SELECIONE_UM_CERTIFIADO);
-//					}
-//				} catch (Exception e) {
-//					getView().getTextInformacao().append(e.getMessage());
-//				} finally {
-//					stopProgressBar();
-//				}
-//			}
-//		};
-//		processar.start();
 	}
 	
-	public void startService(final String service, final URL url, Object data) {
-//		SefazService serv = new SefazService();
-		final Class<?> c1 = null;
-		final Method method = null;
-//		final Class[] paramTypes = new Class[]{String.class};
-		final Object[] attValue = new Object[]{"Teste"};
+	/**
+	 * 
+	 * @throws MalformedURLException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public void consultaNfe() 
+			throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+//		Produção
+//        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl");
+		
+//		Homologação
+        URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2?wsdl");
+        
+        Object data[] = new Object[20];
+		startService("consultaNfe", url, data);
+	}
+	
+	/**
+	 * 
+	 * @throws MalformedURLException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+//	public void cancelamentoNfe() 
+//			throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+////		Produção
+////        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl");
+//		
+////		Homologação
+//        URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl");
+//        
+//        Object data[] = new Object[20];
+//		startService("cancelamentoNfe", url, data);
+//	}
+	
+	/**
+	 * 
+	 * @throws MalformedURLException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public void inutilizacao() 
+			throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+//		Produção
+//        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl");
+		
+//		Homologação
+        URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao2?wsdl");
+        
+        Object data[] = new Object[20];
+		startService("inutilizacao", url, data);
+	}
+	
+	/**
+	 * 
+	 * @throws MalformedURLException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public void recepcao() 
+			throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+//		Produção
+//        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl");
+		
+//		Homologação
+        URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRecepcao2?wsdl");
+        
+        Object data[] = new Object[20];
+		startService("recepcao", url, data);
+	}
+	
+	/**
+	 * 
+	 * @throws MalformedURLException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public void retRecepcao() 
+			throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+//		Produção
+//        URL url = new URL("https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl");
+		
+//		Homologação
+        URL url = new URL("https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRetRecepcao2?wsdl");
+        
+        Object data[] = new Object[20];
+		startService("retRecepcao", url, data);
+	}
+	
+	/**
+	 *  
+	 * 
+	 * @param service
+	 * @param url
+	 * @param data
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 */
+	public void startService(final String service, final URL url, Object data) 
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+		Class<?> c1 = Class.forName("br.com.javac.nfeapplet.business.service.SefazService");
+		final Object i = c1.newInstance();
+		final Method m = c1.getMethod(service, String.class, URL.class);
 		
 		Thread processar = new Thread() {
 			@Override
@@ -265,12 +344,7 @@ public class NFeController {
 								getCertificadoWindows().loadWsCerticates(url, certificado.getAlias(), senha);
 								
 								//Instancia um objeto do tipo Sefaz Service e invoca o método. 
-								c1 = Class.forName("br.com.javac.nfeapplet.business.service.SefazService");
-//								method = c1.getMethod(service);
-								String retorno = (String) c1.getClass().getMethod(service).invoke(c1.newInstance());
-//								String retorno = (String) method.invoke(c1.newInstance(), attValue);
-								
-//								String retorno = getSefazService().service(codigoDoEstado, url);
+								String retorno = (String) m.invoke(i, codigoDoEstado, url);
 								getView().getTextInformacao().append(retorno);
 							}
 							else {

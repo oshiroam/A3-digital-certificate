@@ -22,7 +22,14 @@ import br.inf.portalfiscal.www.nfe.wsdl.recepcaoevento.RecepcaoEventoStub;
  * 
  */
 public class SefazService {
-
+	
+	/**
+	 * Contrutor vazio para usar o newInstance no NFeControler
+	 */
+	public SefazService() {
+		;
+	}
+	
 	/**
 	 * Consulta status do serviço
 	 * 
@@ -34,6 +41,7 @@ public class SefazService {
 	 */
 	public String consultaStatusDoServico(String codigoDoEstado, URL url)
 			throws XMLStreamException, RemoteException {
+		
 		StringBuilder xml = new StringBuilder();
 		xml.append("")
 			.append("<consStatServ versao=\"2.00\" xmlns=\"http://www.portalfiscal.inf.br/nfe\">")
